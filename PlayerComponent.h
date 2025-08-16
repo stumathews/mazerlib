@@ -1,15 +1,17 @@
 #pragma once
 #include <character/Component.h>
-#include "Room.h"
 
-class Player;
-
-class PlayerComponent : public gamelib::Component
+namespace mazer
 {
-public:
-	PlayerComponent(const std::string& componentName, Player* player);
+	class Player;
 
-	Player* ThePlayer;
+	class PlayerComponent : public gamelib::Component
+	{
+	public:
+		PlayerComponent(const std::string& componentName, Player* player);
 
-	int Room;
-};
+		Player* ThePlayer;
+
+		int Room;
+	};
+}

@@ -1,38 +1,44 @@
 #pragma once
 
-#include "Room.h"
-#include "objects/DrawableGameObject.h"
-#include <character/AnimatedSprite.h>
 #include <geometry/Coordinate.h>
-
-#include "asset/SpriteAsset.h"
+#include <objects/DrawableGameObject.h>
 
 namespace gamelib
 {
-	class Pickup final : public DrawableGameObject, public std::enable_shared_from_this<Pickup>
+	class AnimatedSprite;
+	class SpriteAsset;
+	class Asset;
+}
+
+namespace mazer
+{
+
+	class Player;
+
+	class Pickup final : public gamelib::DrawableGameObject, public std::enable_shared_from_this<Pickup>
 	{
 	public:
 		Pickup(const std::string& name, const std::string& type, const int x, const int y, const int width,
-		       const int height, const bool visible, const int inRoomNumber);
+			const int height, const bool visible, const int inRoomNumber);
 
-		Pickup(const std::string& name, const std::string& type, const Coordinate<int> startingPoint, const bool visible,
-		       const int inRoomNumber, const std::shared_ptr<SpriteAsset> asset);
+		Pickup(const std::string& name, const std::string& type, const gamelib::Coordinate<int> startingPoint, const bool visible,
+			const int inRoomNumber, const std::shared_ptr<gamelib::SpriteAsset> asset);
 
 		explicit Pickup(const bool visible);
 
-		GameObjectType GetGameObjectType() override;
+		gamelib::GameObjectType GetGameObjectType() override;
 
 		std::string GetSubscriberName() override;
 		std::string GetName() override;
 		bool IsInSameRoomAsPlayer(std::shared_ptr<Player> player) const;
-		ListOfEvents HandleEvent(const std::shared_ptr<Event>& event, const unsigned long deltaMs) override;
+		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const unsigned long deltaMs) override;
 
 		void Initialize();
 		void Draw(SDL_Renderer* renderer) override;
 		void Update(unsigned long deltaMs) override;
 
 		int RoomNumber;
-		std::shared_ptr<Asset> Asset;
+		std::shared_ptr<gamelib::Asset> Asset;
 
 	protected:
 		void SetBounds();
@@ -40,6 +46,6 @@ namespace gamelib
 	private:
 		int width;
 		int height;
-		std::shared_ptr<AnimatedSprite> sprite;
+		std::shared_ptr<gamelib::AnimatedSprite> sprite;
 	};
 }

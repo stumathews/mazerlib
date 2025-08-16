@@ -1,99 +1,107 @@
 #include "CharacterBuilder.h"
+#include <asset/SpriteAsset.h>
+#include <common/constants.h>
+#include <events/PlayerMovedEvent.h>
+#include <objects/GameObjectFactory.h>
+#include <utils/Utils.h>
+
 #include "Enemy.h"
 #include "GameData.h"
 #include "GameObjectMoveStrategy.h"
-#include "asset/SpriteAsset.h"
-#include "common/constants.h"
-#include "events/PlayerMovedEvent.h"
-#include "objects/GameObjectFactory.h"
-#include <utils/Utils.h>
+#include "Room.h"
+#include "Pickup.h"
+#include "Player.h"
 
 using namespace gamelib;
 
-std::shared_ptr<Player> CharacterBuilder::BuildPlayer(const std::string& playerName,
-                                                      const std::shared_ptr<Room>& playerRoom,
-                                                      const int playerResourceId, const std::string& nickName)
+namespace mazer
 {
-	// The player's sprite sheet
-	const auto spriteAsset = To<SpriteAsset>(ResourceManager::Get()->GetAssetInfo(playerResourceId));
 
-	const auto positionInRoom = playerRoom->GetCenter(spriteAsset->Dimensions);
+	std::shared_ptr<Player> CharacterBuilder::BuildPlayer(const std::string& playerName,
+		const std::shared_ptr<Room>& playerRoom,
+		const int playerResourceId, const std::string& nickName)
+	{
+		// The player's sprite sheet
+		const auto spriteAsset = To<SpriteAsset>(ResourceManager::Get()->GetAssetInfo(playerResourceId));
 
-	// Build player's sprite
-	const auto animatedSprite = GameObjectFactory::BuildSprite(
-		playerName,
-		"Player",
-		spriteAsset,
-		positionInRoom,
-		true);
+		const auto positionInRoom = playerRoom->GetCenter(spriteAsset->Dimensions);
 
-	// Build player
-	auto player = std::make_shared<Player>(
-		playerName,
-		"Player", 
-		playerRoom,
-		spriteAsset->Dimensions, 
-		nickName);
+		// Build player's sprite
+		const auto animatedSprite = GameObjectFactory::BuildSprite(
+			playerName,
+			"Player",
+			spriteAsset,
+			positionInRoom,
+			true);
 
-	// Initialize player
-	player->LoadSettings();
-	player->SetMoveStrategy(std::make_shared<GameObjectMoveStrategy>(player, player->CurrentRoom));
-	player->SetTag(gamelib::PlayerTag);
-	player->SetSprite(animatedSprite);
-	player->IntProperties["Health"] = 100;
+		// Build player
+		auto player = std::make_shared<Player>(
+			playerName,
+			"Player",
+			playerRoom,
+			spriteAsset->Dimensions,
+			nickName);
 
-	// We keep a reference to track of the player globally
-	GameData::Get()->player = player;
+		// Initialize player
+		player->LoadSettings();
+		player->SetMoveStrategy(std::make_shared<GameObjectMoveStrategy>(player, player->CurrentRoom));
+		player->SetTag(gamelib::PlayerTag);
+		player->SetSprite(animatedSprite);
+		player->IntProperties["Health"] = 100;
 
-	return player;
-}
+		// We keep a reference to track of the player globally
+		GameData::Get()->player = player;
 
-std::shared_ptr<Enemy> CharacterBuilder::BuildEnemy(const std::string& enemyName, const std::shared_ptr<Room>& enemyRoom,
-                                                    const int enemySpriteResourceId, Direction startingDirection,
-                                                    const std::shared_ptr<const Level>& level)
-{
-	// A enemy's sprite asset
-	const auto spriteAsset = To<SpriteAsset>(ResourceManager::Get()->GetAssetInfo(enemySpriteResourceId));
+		return player;
+	}
 
-	const auto positionInRoom = enemyRoom->GetCenter(spriteAsset->Dimensions);
+	std::shared_ptr<Enemy> CharacterBuilder::BuildEnemy(const std::string& enemyName, const std::shared_ptr<Room>& enemyRoom,
+		const int enemySpriteResourceId, gamelib::Direction startingDirection,
+		const std::shared_ptr<const Level>& level)
+	{
+		// A enemy's sprite asset
+		const auto spriteAsset = To<SpriteAsset>(ResourceManager::Get()->GetAssetInfo(enemySpriteResourceId));
 
-	// Build sprite
-	const auto enemyAnimatedSprite = GameObjectFactory::BuildSprite(
-		enemyName, 
-	"Enemy", 
-		spriteAsset, 
-		positionInRoom, 
-		true);
+		const auto positionInRoom = enemyRoom->GetCenter(spriteAsset->Dimensions);
 
-	auto enemy = std::make_shared<Enemy>(enemyName,
-		"Enemy",
-		positionInRoom,
-		true,
-		enemyRoom,
-		enemyAnimatedSprite,
-		startingDirection,
-		level);
+		// Build sprite
+		const auto enemyAnimatedSprite = GameObjectFactory::BuildSprite(
+			enemyName,
+			"Enemy",
+			spriteAsset,
+			positionInRoom,
+			true);
 
-	return enemy;
-}
+		auto enemy = std::make_shared<Enemy>(enemyName,
+			"Enemy",
+			positionInRoom,
+			true,
+			enemyRoom,
+			enemyAnimatedSprite,
+			startingDirection,
+			level);
+
+		return enemy;
+	}
 
 
-std::shared_ptr<Pickup> CharacterBuilder::BuildPickup(const std::string& pickupName,
-                                                      const std::shared_ptr<Room>& pickupRoom,
-                                                      const int pickupResourceId)
-{	
-	const auto pickupSpriteSheet = To<SpriteAsset>(ResourceManager::Get()->GetAssetInfo(pickupResourceId));
+	std::shared_ptr<mazer::Pickup> CharacterBuilder::BuildPickup(const std::string& pickupName,
+		const std::shared_ptr<Room>& pickupRoom,
+		const int pickupResourceId)
+	{
+		const auto pickupSpriteSheet = To<SpriteAsset>(ResourceManager::Get()->GetAssetInfo(pickupResourceId));
 
-	const auto positionInRoom = pickupRoom->GetCenter(pickupSpriteSheet->Dimensions);
+		const auto positionInRoom = pickupRoom->GetCenter(pickupSpriteSheet->Dimensions);
 
-	auto pickup = std::make_shared<Pickup>(pickupName, "Pickup", 
-		positionInRoom,
-		true,
-		pickupRoom->GetRoomNumber(), 
-		pickupSpriteSheet);
+		auto pickup = std::make_shared<Pickup>(pickupName, "Pickup",
+			positionInRoom,
+			true,
+			pickupRoom->GetRoomNumber(),
+			pickupSpriteSheet);
 
-	pickup->Initialize();
-	pickup->LoadSettings();
-	pickup->SubscribeToEvent(PlayerMovedEventTypeEventId);
-	return pickup;
+		pickup->Initialize();
+		pickup->LoadSettings();
+		pickup->SubscribeToEvent(PlayerMovedEventTypeEventId);
+		return pickup;
+	}
 }

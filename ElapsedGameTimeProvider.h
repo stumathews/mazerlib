@@ -1,12 +1,15 @@
 ﻿#pragma once
 #include "GameDataManager.h"
-#include "net/IElapsedTimeProvider.h"
+#include "cppgamelib/net/IElapsedTimeProvider.h"
 
-class ElapsedGameTimeProvider : public gamelib::IElapsedTimeProvider
+namespace mazer
 {
-public:
-	int GetElapsedTime() override
+	class ElapsedGameTimeProvider : public gamelib::IElapsedTimeProvider
 	{
-		return static_cast<int>(GameDataManager::Get()->GameWorldData.ElapsedGameTime) / 1000;
-	}
-};
+	public:
+		int GetElapsedTime() override
+		{
+			return static_cast<int>(GameDataManager::Get()->GameWorldData.ElapsedGameTime) / 1000;
+		}
+	};
+}

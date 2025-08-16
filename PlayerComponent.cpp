@@ -1,7 +1,11 @@
 #include "PlayerComponent.h"
 
-PlayerComponent::PlayerComponent(const std::string& componentName, Player* player)
-	: Component(componentName), ThePlayer(player), Room(0)
+namespace mazer
 {
-	// init members only
+	PlayerComponent::PlayerComponent(const std::string& componentName, Player* player)
+		: Component(componentName), ThePlayer(player), Room(0)
+	{
+		// init members only
+	}
+
 }

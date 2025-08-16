@@ -1,26 +1,27 @@
+#include <cppgamelib/utils/Utils.h>
+#include <resource/ResourceManager.h>
+
 #include "Pickup.h"
-#include "events/PlayerMovedEvent.h"
-#include <common/Common.h>
-#include <scene/SceneManager.h>
-#include "player.h"
-#include <memory>
+#include "objects/gameobject.h"
 #include <asset/SpriteAsset.h>
+#include <cppgamelib/events/EventFactory.h>
+#include <cppgamelib/events/PlayerMovedEvent.h>
 #include "EventNumber.h"
-#include "SDLCollisionDetection.h"
 #include "GameData.h"
 #include "GameObjectEventFactory.h"
 #include "PlayerCollidedWithPickupEvent.h"
-#include "events/EventFactory.h"
-#include "resource/ResourceManager.h"
-#include "utils/Utils.h"
+#include "SDLCollisionDetection.h"
+#include "character/AnimatedSprite.h"
+#include "Player.h"
+#include "RoomInfo.h"
 
 using namespace std;
 
-namespace gamelib
+namespace mazer
 {
 	Pickup::Pickup(const std::string& name, const std::string& type, const int x, const int y, const int width,
 		const int height, const bool visible, const int inRoomNumber)
-		: DrawableGameObject(name, type, Coordinate(x, y), visible)
+		: DrawableGameObject(name, type, gamelib::Coordinate(x, y), visible)
 	{
 		this->IsVisible = visible;
 		this->width = width;
@@ -28,10 +29,10 @@ namespace gamelib
 		this->RoomNumber = inRoomNumber;
 	}
 
-	Pickup::Pickup(const std::string& name, const std::string& type, const Coordinate<int> startingPoint,
-	               // ReSharper disable once CppPassValueParameterByConstReference
-	               const bool visible, const int inRoomNumber, const std::shared_ptr<SpriteAsset> asset)  // NOLINT(performance-unnecessary-value-param)
-		: DrawableGameObject(name, type, Coordinate(startingPoint.GetX(), startingPoint.GetY()), visible)
+	Pickup::Pickup(const std::string& name, const std::string& type, const gamelib::Coordinate<int> startingPoint,
+		// ReSharper disable once CppPassValueParameterByConstReference
+		const bool visible, const int inRoomNumber, const std::shared_ptr<gamelib::SpriteAsset> asset)  // NOLINT(performance-unnecessary-value-param)
+		: DrawableGameObject(name, type, gamelib::Coordinate(startingPoint.GetX(), startingPoint.GetY()), visible)
 	{
 		this->IsVisible = visible;
 		this->Asset = asset;
@@ -40,7 +41,7 @@ namespace gamelib
 		this->RoomNumber = inRoomNumber;
 	}
 
-	Pickup::Pickup(const bool visible): DrawableGameObject(0, 0, visible)
+	Pickup::Pickup(const bool visible) : DrawableGameObject(0, 0, visible)
 	{
 		this->IsVisible = visible;
 		this->width = 0;
@@ -52,17 +53,17 @@ namespace gamelib
 	{
 		SetBounds();
 
-		sprite = AnimatedSprite::Create(Position, To<SpriteAsset>(ResourceManager::Get()->GetAssetInfo(Asset->Name)));
+		sprite = gamelib::AnimatedSprite::Create(Position, gamelib::To<gamelib::SpriteAsset>(gamelib::ResourceManager::Get()->GetAssetInfo(Asset->Name)));
 		width = sprite->Dimensions.GetWidth();
 		height = sprite->Dimensions.GetHeight();
 	}
 
-	ListOfEvents Pickup::HandleEvent(const std::shared_ptr<Event>& event, const unsigned long deltaMs)
+	gamelib::ListOfEvents Pickup::HandleEvent(const std::shared_ptr<gamelib::Event>& event, const unsigned long deltaMs)
 	{
-		ListOfEvents generatedEvents;
+		gamelib::ListOfEvents generatedEvents;
 
 		// Player moved?
-		if (event->Id.PrimaryId == PlayerMovedEventTypeEventId.PrimaryId)
+		if (event->Id.PrimaryId == gamelib::PlayerMovedEventTypeEventId.PrimaryId)
 		{
 			const auto player = GameData::Get()->GetPlayer();
 
@@ -72,7 +73,7 @@ namespace gamelib
 				if (SdlCollisionDetection::IsColliding(&player->Bounds, &Bounds))
 				{
 					// Yes
-					generatedEvents.push_back(EventFactory::Get()->CreateGenericEvent(FetchedPickupEventId, GetSubscriberName()));
+					generatedEvents.push_back(gamelib::EventFactory::Get()->CreateGenericEvent(FetchedPickupEventId, GetSubscriberName()));
 					generatedEvents.push_back(make_shared<PlayerCollidedWithPickupEvent>(player, shared_from_this()));
 
 					// Schedule ourselves to be removed from the game
@@ -98,9 +99,9 @@ namespace gamelib
 		sprite->Update(deltaMs);
 	}
 
-	GameObjectType Pickup::GetGameObjectType()
+	gamelib::GameObjectType Pickup::GetGameObjectType()
 	{
-		return GameObjectType::pickup;
+		return gamelib::GameObjectType::pickup;
 	}
 
 	std::string Pickup::GetSubscriberName()

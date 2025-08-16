@@ -1,12 +1,15 @@
 #pragma once
 #include <SDL.h>
 
-class SdlCollisionDetection
+namespace mazer
 {
-public:
-	static bool IsColliding(const SDL_Rect* bounds1, const SDL_Rect* bounds2)
+	class SdlCollisionDetection
 	{
-		SDL_Rect result;
-		return SDL_IntersectRect(bounds1, bounds2, &result);
-	}
-};
+	public:
+		static bool IsColliding(const SDL_Rect* bounds1, const SDL_Rect* bounds2)
+		{
+			SDL_Rect result;
+			return SDL_IntersectRect(bounds1, bounds2, &result);
+		}
+	};
+}
