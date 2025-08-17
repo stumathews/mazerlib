@@ -4,7 +4,7 @@
 
 #include "RoomInfo.h"
 #include "cppgamelib/ai/FSM.h"
-//#include "character/MovementAtSpeed.h"
+#include <cppgamelib/character/MovementAtSpeed.h>
 #include "Room.h"
 #include <cppgamelib/character/Movement.h>
 #include <cppgamelib/events/PlayerMovedEvent.h>
@@ -249,14 +249,13 @@ namespace mazer
 
 	bool Enemy::Move(const unsigned long deltaMs)
 	{
-		//const std::shared_ptr<gamelib::IMovement> movementAtSpeed = std::make_shared<gamelib::MovementAtSpeed>(speed, currentFacingDirection, deltaMs);
-		//const std::shared_ptr<gamelib::IMovement> constantPixelMovement = std::make_shared<gamelib::Movement>(currentFacingDirection);
+		const std::shared_ptr<gamelib::IMovement> movementAtSpeed = std::make_shared<gamelib::MovementAtSpeed>(speed, currentFacingDirection, deltaMs);
+		const std::shared_ptr<gamelib::IMovement> constantPixelMovement = std::make_shared<gamelib::Movement>(currentFacingDirection);
 
 		// Move the game object a bit
-
-		/*isValidMove = gameObjectMoveStrategy->MoveGameObject(moveAtSpeed
+		isValidMove = gameObjectMoveStrategy->MoveGameObject(moveAtSpeed
 			? movementAtSpeed
-			: constantPixelMovement);*/
+			: constantPixelMovement);
 
 		if (isValidMove)
 		{
@@ -267,7 +266,7 @@ namespace mazer
 				return true;
 			}
 
-			gamelib::EventSubscriber::RaiseEvent(std::make_shared<EnemyMovedEvent>(shared_from_this()));
+			EventSubscriber::RaiseEvent(std::make_shared<EnemyMovedEvent>(shared_from_this()));
 
 			return true;
 		}

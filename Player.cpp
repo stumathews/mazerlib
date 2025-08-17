@@ -15,7 +15,7 @@
 //#include "GameObjectMoveStrategy.h"
 #include "GameData.h"
 #include "character/IGameMoveStrategy.h"
-//#include "cppgamelib/character/StatefulMove.h"
+#include <cppgamelib/character/StatefulMove.h>
 
 using namespace std;
 using namespace gamelib;
@@ -198,12 +198,11 @@ namespace mazer
 
 	void Player::Move(const unsigned long deltaMs)
 	{
-		//const auto movement = std::make_shared<StatefulMove>(speed, DirectionKeyStates, deltaMs);
+		const auto movement = std::make_shared<StatefulMove>(speed, DirectionKeyStates, deltaMs);
 
 		// Move player
-		//const auto isValidMove = moveStrategy->MoveGameObject(movement);	
+		const auto isValidMove = moveStrategy->MoveGameObject(movement);
 
-		auto isValidMove = true;
 		if (!isValidMove)
 		{
 			EventManager::Get()->RaiseEvent(EventFactory::Get()->CreateGenericEvent(InvalidMoveEventId, GetName()), this);
@@ -213,10 +212,10 @@ namespace mazer
 		if (Sprite)
 		{
 			// Only animate sprite if there is no direction set
-			/*if(movement->GetDirection() != Direction::None)
+			if (movement->GetDirection() != Direction::None)
 			{
 				Sprite->Update(deltaMs, AnimatedSprite::GetStdDirectionAnimationFrameGroup(movement->GetDirection()));
-			}*/
+			}
 
 			Sprite->MoveSprite(Position.GetX(), Position.GetY());
 		}
@@ -226,10 +225,10 @@ namespace mazer
 		UpdateBounds(Width, Height);
 
 		// Only register a move if there was a move in a known direction
-		/*if(movement->GetDirection() != Direction::None)
+		if (movement->GetDirection() != Direction::None)
 		{
 			EventManager::Get()->RaiseEvent(EventFactory::Get()->CreatePlayerMovedEvent(movement->GetDirection()), this);
-		}*/
+		}
 	}
 
 	void Player::Draw(SDL_Renderer* renderer)
