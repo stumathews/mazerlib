@@ -102,16 +102,16 @@ enable_testing()
 
 # Add an executable for running all tests. This excludes networking tests
 add_executable(AllTests
-Tests/2DGameDevLibTests.cpp
-Tests/CharacterBuilderTests.cpp
-Tests/GameDataManagerTests.cpp
-Tests/GameDataTests.cpp
-Tests/GameObjectMoveStrategyTests.cpp
-Tests/LevelGeneratorTests.cpp
-Tests/LevelTests.cpp
-Tests/PickupTests.cpp
-Tests/PlayerTests.cpp
-Tests/RoomTests.cpp
+tests/2DGameDevLibTests.cpp
+tests/CharacterBuilderTests.cpp
+tests/GameDataManagerTests.cpp
+tests/GameDataTests.cpp
+tests/GameObjectMoveStrategyTests.cpp
+tests/LevelGeneratorTests.cpp
+tests/LevelTests.cpp
+tests/PickupTests.cpp
+tests/PlayerTests.cpp
+tests/RoomTests.cpp
 )
 
 # Set the properties for the test executables
