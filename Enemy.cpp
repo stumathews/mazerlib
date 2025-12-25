@@ -17,7 +17,7 @@
 #include "GameObjectMoveStrategy.h"
 #include "cppgamelib/ai/BehaviorTreeBuilder.h"
 #include "cppgamelib/ai/InlineBehavioralAction.h"
-#include "player.h"
+#include "Player.h"
 #include "PlayerCollidedWithEnemyEvent.h"
 #include "SDLCollisionDetection.h"
 #include "cppgamelib/character/Hotspot.h"
@@ -392,12 +392,12 @@ namespace mazer
 		constexpr auto half = 2;
 
 		const auto isWithinVerticalFov =
-			Hotspot->GetPosition().GetY() > playerHotspotPosition.GetY() + playerHotspotParentHeight / half ||
-			Hotspot->GetPosition().GetY() < playerHotspotPosition.GetY() - playerHotspotParentHeight / half;
+			TheHotspot->GetPosition().GetY() > playerHotspotPosition.GetY() + playerHotspotParentHeight / half ||
+			TheHotspot->GetPosition().GetY() < playerHotspotPosition.GetY() - playerHotspotParentHeight / half;
 
 		const auto isWithinHorizontalFov =
-			Hotspot->GetPosition().GetX() > playerHotspotPosition.GetX() + playerHotspotParentWidth / half ||
-			Hotspot->GetPosition().GetX() < playerHotspotPosition.GetX() - playerHotspotParentWidth / half;
+			TheHotspot->GetPosition().GetX() > playerHotspotPosition.GetX() + playerHotspotParentWidth / half ||
+			TheHotspot->GetPosition().GetX() < playerHotspotPosition.GetX() - playerHotspotParentWidth / half;
 
 		return verticalView
 			? isWithinVerticalFov
@@ -459,7 +459,7 @@ namespace mazer
 
 	void Enemy::CheckForPlayerCollision()
 	{
-		const auto player = GameDataManager::Get()->GameData()->GetPlayer();
+		const auto player = GameDataManager::Get()->TheGameData()->GetPlayer();
 
 		if (InSameRoomAsPlayer(player, CurrentRoom->TheRoom) &&
 			SdlCollisionDetection::IsColliding(&player->Bounds, &Bounds))

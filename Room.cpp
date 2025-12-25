@@ -109,7 +109,7 @@ namespace mazer
 
 	void Room::UpdateEnemyRoom(const std::shared_ptr<Enemy>& enemy)
 	{
-		const auto npcHotspot = enemy->Hotspot->GetBounds();
+		const auto npcHotspot = enemy->TheHotspot->GetBounds();
 		SDL_Rect _;
 
 		if (SDL_IntersectRect(&InnerBounds, &npcHotspot, &_))
@@ -134,7 +134,7 @@ namespace mazer
 		}
 		else if (event->Id.PrimaryId == EnemyMovedEventId.PrimaryId)
 		{
-			UpdateEnemyRoom(To<EnemyMovedEvent>(event)->Enemy);
+			UpdateEnemyRoom(To<EnemyMovedEvent>(event)->TheEnemy);
 		}
 		else
 		{

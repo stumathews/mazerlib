@@ -9,7 +9,7 @@
 #include "Level.h"
 #include "Room.h"
 #include "cppgamelib/resource/ResourceManager.h"
-#include "Pickup.h"
+#include "pickup.h"
 
 class PickupTests : public testing::Test 
 {

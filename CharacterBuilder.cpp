@@ -9,7 +9,7 @@
 #include "GameData.h"
 #include "GameObjectMoveStrategy.h"
 #include "Room.h"
-#include "Pickup.h"
+#include "pickup.h"
 #include "Player.h"
 
 using namespace gamelib;

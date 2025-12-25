@@ -12,10 +12,10 @@ namespace mazer
 	{
 	public:
 		explicit EnemyMovedEvent(std::shared_ptr<Enemy> enemy)
-			: Event(EnemyMovedEventId), Enemy(std::move(enemy))
+			: Event(EnemyMovedEventId), TheEnemy(std::move(enemy))
 		{
 		}
 
-		std::shared_ptr<Enemy> Enemy;
+		std::shared_ptr<Enemy> TheEnemy;
 	};
 }

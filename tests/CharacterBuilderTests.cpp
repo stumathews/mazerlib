@@ -15,7 +15,7 @@
 #include "Room.h"
 #include "Enemy.h"
 #include "RoomInfo.h"
-#include "Pickup.h"
+#include "pickup.h"
 #include "Player.h"
 
 class CharacterBuilderTests : public testing::Test 

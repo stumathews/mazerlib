@@ -19,7 +19,7 @@
 #include <cppgamelib/events/EventFactory.h>
 #include <cppgamelib/events/EventManager.h>
 
-#include "Pickup.h"
+#include "pickup.h"
 #include "Player.h"
 #include "cppgamelib/character/DirectionUtils.h"
 #include <cppgamelib/events/AddGameObjectToCurrentSceneEvent.h>
@@ -78,7 +78,9 @@ namespace mazer
 			if (auto autoPopulatePickups = scene->ToElement()->Attribute("autoPopulatePickups"))
 			{
 				auto strToTransform = string(autoPopulatePickups);
-				ranges::transform(strToTransform, strToTransform.begin(), ::toupper);
+				std::transform(strToTransform.begin(), strToTransform.end(), strToTransform.begin(),
+				       [](unsigned char c){ return std::toupper(c); });
+
 				isAutoPopulatePickups = strToTransform == "TRUE";
 			}
 
@@ -204,7 +206,7 @@ namespace mazer
 		for (auto& enemy : Enemies)
 		{
 			enemy->Initialize();
-			GameDataManager::Get()->GameData()->AddEnemy(enemy);
+			GameDataManager::Get()->TheGameData()->AddEnemy(enemy);
 			AddGameObjectToScene(enemy);
 		}
 	}

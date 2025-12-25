@@ -15,7 +15,7 @@
 
 #include "Level.h"
 #include "Player.h"
-#include "Pickup.h"
+#include "pickup.h"
 
 using namespace std;
 using namespace mazer;
@@ -99,7 +99,7 @@ TEST_F(GameDataManagerTests, Initialize)
 
 TEST_F(GameDataManagerTests, InitialState)
 {
-	EXPECT_TRUE(subject->GameData());
+	EXPECT_TRUE(subject->TheGameData());
 	EXPECT_TRUE(subject->GetSubscriberName() == "GameDataManager");
 }
 
@@ -131,7 +131,7 @@ TEST_F(GameDataManagerTests, Adds_GameObject)
 	// When receiving an event to add game object to scene
 	subject->HandleEvent(std::dynamic_pointer_cast<gamelib::Event>(gamelib::EventFactory::CreateAddToSceneEvent(player)), 0);
 
-	const auto gameObjects = subject->GameData()->GameObjects;
+	const auto gameObjects = subject->TheGameData()->GameObjects;
 	const auto gameObject = gameObjects[0].lock();
 
 	// Ensure its added to the game data
@@ -152,7 +152,7 @@ TEST_F(GameDataManagerTests, Deletes_GameObject)
 	subject->HandleEvent(std::dynamic_pointer_cast<gamelib::Event>(GameObjectEventFactory::MakeRemoveObjectEvent(player)), 0);
 	
 	// Ensure its removed from the game data
-	EXPECT_EQ(subject->GameData()->GameObjects.size(), 0) << "Expected 0 game object";
+	EXPECT_EQ(subject->TheGameData()->GameObjects.size(), 0) << "Expected 0 game object";
 }
 
 TEST_F(GameDataManagerTests, Subscriber_Name_Is_Correct)

@@ -14,7 +14,7 @@
       "kind": "git",
       "repository": "https://github.com/stumathews/vcpkg-registry",
       "reference": "master",
-      "baseline": "c282ab408d841045c962a0d6ff72a5f83467b609",
+      "baseline": "80e8905a3b8fd6572f23fdeb5f2939b0f4a0536e",
       "packages": [ "libmonad", "cppgamelib" ]
     }
   ]

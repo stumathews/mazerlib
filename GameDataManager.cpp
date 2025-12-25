@@ -74,22 +74,22 @@ namespace mazer
 		{
 			if (gameObject->Type == "Room")
 			{
-				GameData()->AddRoom(To<Room>(gameObject));
+				TheGameData()->AddRoom(To<Room>(gameObject));
 			}
 			if (gameObject->Type == "Enemy")
 			{
-				GameData()->AddEnemy(To<Enemy>(gameObject));
+				TheGameData()->AddEnemy(To<Enemy>(gameObject));
 			}
 		}
 		else
 		{
 			if (gameObject->GetGameObjectType() == GameObjectType::pickup)
 			{
-				GameData()->AddPickup(To<Pickup>(gameObject));
+				TheGameData()->AddPickup(To<Pickup>(gameObject));
 			}
 		}
 
-		GameData()->AddGameObject(gameObject);
+		TheGameData()->AddGameObject(gameObject);
 	}
 
 	void GameDataManager::RemoveFromGameData(const std::shared_ptr<GameObjectEvent>& event)

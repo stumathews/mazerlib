@@ -154,7 +154,7 @@ namespace mazer
 		}
 
 		const auto moveEvent = dynamic_pointer_cast<ControllerMoveEvent>(event);
-		const auto moveDirection = moveEvent->Direction;
+		const auto moveDirection = moveEvent->direction;
 
 		// Set acceleration in direction depending on if direction key is pressed or not
 		DirectionKeyStates[moveDirection] = moveEvent->GetKeyState();

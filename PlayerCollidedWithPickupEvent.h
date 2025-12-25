@@ -12,11 +12,11 @@ namespace mazer
 	{
 	public:
 		PlayerCollidedWithPickupEvent(std::shared_ptr<Player> player, std::shared_ptr<Pickup> pickup)
-			: Event(PlayerCollidedWithPickupEventId), Player(std::move(player)), Pickup(std::move(pickup))
+			: Event(PlayerCollidedWithPickupEventId), ThePlayer(std::move(player)), ThePickup(std::move(pickup))
 		{
 		}
 
-		std::shared_ptr<Player> Player;
-		std::shared_ptr<Pickup> Pickup;
+		std::shared_ptr<Player> ThePlayer;
+		std::shared_ptr<Pickup> ThePickup;
 	};
 }

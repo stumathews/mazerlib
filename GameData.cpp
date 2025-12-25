@@ -1,5 +1,5 @@
 #include "GameData.h"
-#include "room.h"
+#include "Room.h"
 #include <memory>
 #include <objects/GameObject.h>
 #include <vector>

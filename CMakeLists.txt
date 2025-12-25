@@ -70,10 +70,51 @@ generate_export_header(mazer)
 find_package(GTest CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(cppgamelib CONFIG REQUIRED)
-find_package(SDL2_ttf CONFIG REQUIRED)
-find_package(SDL2_mixer CONFIG REQUIRED)
-find_package(SDL2_image CONFIG REQUIRED)
 find_package(unofficial-sodium CONFIG REQUIRED)
+
+find_package(SDL2 CONFIG REQUIRED)
+find_package(SDL2_ttf CONFIG REQUIRED)
+find_package(SDL2_image CONFIG REQUIRED)
+find_package(SDL2_mixer CONFIG REQUIRED)
+
+# --- SDL2 core ---
+set(SDL2_CORE_TARGET SDL2::SDL2)
+
+# --- SDL2_ttf ---
+if(TARGET SDL2_ttf::SDL2_ttf)
+    set(SDL2_TTF_TARGET SDL2_ttf::SDL2_ttf)
+elseif(TARGET SDL2_ttf::SDL2_ttf-static)
+    set(SDL2_TTF_TARGET SDL2_ttf::SDL2_ttf-static)
+else()
+    message(FATAL_ERROR "SDL2_ttf target not found")
+endif()
+
+# --- SDL2_image ---
+if(TARGET SDL2_image::SDL2_image)
+    set(SDL2_IMAGE_TARGET SDL2_image::SDL2_image)
+elseif(TARGET SDL2_image::SDL2_image-static)
+    set(SDL2_IMAGE_TARGET SDL2_image::SDL2_image-static)
+else()
+    message(FATAL_ERROR "SDL2_image target not found")
+endif()
+
+# --- SDL2_mixer ---
+if(TARGET SDL2_mixer::SDL2_mixer)
+    set(SDL2_MIXER_TARGET SDL2_mixer::SDL2_mixer)
+elseif(TARGET SDL2_mixer::SDL2_mixer-static)
+    set(SDL2_MIXER_TARGET SDL2_mixer::SDL2_mixer-static)
+else()
+    message(FATAL_ERROR "SDL2_mixer target not found")
+endif()
+
+# Check if SDL2 targets are static
+macro(add_sdl2_static_dependencies target)
+    if (${target} MATCHES "-static$")
+        if(UNIX)
+            target_link_libraries(cppgamelib PRIVATE freetype z png jpeg pthread m dl)
+        endif()
+    endif()
+endmacro()
 
 # Set a few properties for the library 
 set_target_properties(mazer PROPERTIES LINKER_LANGUAGE CXX)
@@ -82,9 +123,9 @@ set_target_properties(mazer PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(mazer 
 PRIVATE
 SDL2::SDL2 
-SDL2_ttf::SDL2_ttf
-SDL2_mixer::SDL2_mixer
-SDL2_image::SDL2_image
+${SDL2_TTF_TARGET}
+${SDL2_IMAGE_TARGET}
+${SDL2_MIXER_TARGET}
 unofficial-sodium::sodium
 cppgamelib::cppgamelib
 )
@@ -118,19 +159,19 @@ tests/RoomTests.cpp
 set_target_properties(AllTests PROPERTIES LINKER_LANGUAGE CXX)
 
 # Set the include directories for the test executables
-target_include_directories(AllTests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Tests)
+target_include_directories(AllTests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
 # Link libraries that the test AllTests exeutable uses
 target_link_libraries(AllTests PRIVATE 
 mazer
 SDL2::SDL2
-SDL2_ttf::SDL2_ttf
-SDL2_mixer::SDL2_mixer
-SDL2_image::SDL2_image
+${SDL2_TTF_TARGET}
+${SDL2_IMAGE_TARGET}
+${SDL2_MIXER_TARGET}
 unofficial-sodium::sodium
 cppgamelib::cppgamelib
 PRIVATE
-GTest::gmock_main winmm)
+GTest::gmock_main)
 
 # Set include directory for allTests executable
 target_include_directories(AllTests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

@@ -35,7 +35,7 @@ namespace mazer
 		std::string GetSubscriberName() override;
 		void Initialize(bool isNetworkGame);
 
-		static GameData* GameData() { return GameData::Get(); }
+		static GameData* TheGameData() { return GameData::Get(); }
 		gamelib::GameWorldData GameWorldData{};
 	protected:
 		static GameDataManager* instance;

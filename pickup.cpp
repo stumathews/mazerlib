@@ -1,8 +1,8 @@
 #include <cppgamelib/utils/Utils.h>
 #include <resource/ResourceManager.h>
 
-#include "Pickup.h"
-#include "objects/gameobject.h"
+#include "pickup.h"
+#include <objects/GameObject.h>
 #include <asset/SpriteAsset.h>
 #include <cppgamelib/events/EventFactory.h>
 #include <cppgamelib/events/PlayerMovedEvent.h>
