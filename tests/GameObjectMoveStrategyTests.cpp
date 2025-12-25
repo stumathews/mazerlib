@@ -1,4 +1,3 @@
-#pragma once
 #include "CharacterBuilder.h"
 #include "GameData.h"
 #include "GameObjectMoveStrategy.h"
