@@ -1,6 +1,7 @@
 {
   "dependencies": [
     "gtest",
+    "tinyxml2",
     "sdl2",
     "cppgamelib"
   ]

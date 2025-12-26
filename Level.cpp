@@ -13,7 +13,7 @@
 #include "Room.h"
 #include "RoomGenerator.h"
 #include "Rooms.h"
-#include "cppgamelib/file/tinyxml2.h"
+#include <tinyxml2.h>
 #include "cppgamelib/character/AnimatedSprite.h"
 //
 #include <cppgamelib/events/EventFactory.h>

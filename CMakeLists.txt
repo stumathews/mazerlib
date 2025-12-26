@@ -67,6 +67,7 @@ SDLCollisionDetection.h)
 generate_export_header(mazer)
 
 # Find packages for library dependencies (these will come via vcpkg)
+find_package(tinyxml2 CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(cppgamelib CONFIG REQUIRED)
@@ -130,6 +131,7 @@ ${SDL2_MIXER_TARGET}
 unofficial-sodium::sodium
 cppgamelib::cppgamelib
 ${LUA_LIBRARIES}
+tinyxml2::tinyxml2
 )
 
 message("Include dirs:")
@@ -174,7 +176,9 @@ unofficial-sodium::sodium
 cppgamelib::cppgamelib
 ${LUA_LIBRARIES}
 PRIVATE
-GTest::gmock_main)
+GTest::gmock_main
+tinyxml2::tinyxml2
+)
 
 # Set include directory for allTests executable
 target_include_directories(AllTests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
