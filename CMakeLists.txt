@@ -71,6 +71,7 @@ find_package(GTest CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(cppgamelib CONFIG REQUIRED)
 find_package(unofficial-sodium CONFIG REQUIRED)
+find_package(Lua REQUIRED)
 
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_ttf CONFIG REQUIRED)
@@ -128,6 +129,7 @@ ${SDL2_IMAGE_TARGET}
 ${SDL2_MIXER_TARGET}
 unofficial-sodium::sodium
 cppgamelib::cppgamelib
+${LUA_LIBRARIES}
 )
 
 message("Include dirs:")
@@ -170,6 +172,7 @@ ${SDL2_IMAGE_TARGET}
 ${SDL2_MIXER_TARGET}
 unofficial-sodium::sodium
 cppgamelib::cppgamelib
+${LUA_LIBRARIES}
 PRIVATE
 GTest::gmock_main)
 
