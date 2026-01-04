@@ -16,7 +16,7 @@
 #include "GameObjectEventFactory.h"
 #include "GameObjectMoveStrategy.h"
 #include "cppgamelib/ai/BehaviorTreeBuilder.h"
-#include "cppgamelib/ai/InlineBehavioralAction.h"
+#include "cppgamelib/ai/InlineAction.h"
 #include "Player.h"
 #include "PlayerCollidedWithEnemyEvent.h"
 #include "SDLCollisionDetection.h"
@@ -97,26 +97,26 @@ namespace mazer
 			// Setup Enemy Behavior via Behavior Tree
 
 			// Behaviors
-			auto* lookForPlayer = new gamelib::InlineBehavioralAction([&](const unsigned long deltaMs)
+			auto* lookForPlayer = new gamelib::ai::InlineAction([&](const unsigned long deltaMs)
 				{
 					LookForPlayer();
-					return gamelib::BehaviorResult::Success;
+					return gamelib::Status::Success;
 				});
 
-			auto* isInvalidMove = new gamelib::InlineBehavioralAction([&](const unsigned long deltaMs)
+			auto* isInvalidMove = new gamelib::ai::InlineAction([&](const unsigned long deltaMs)
 				{
 					return !isValidMove
-						? gamelib::BehaviorResult::Success
-						: gamelib::BehaviorResult::Failure;
+						? gamelib::Status::Success
+						: gamelib::Status::Failure;
 				});
 
-			auto* invertNpcDirection = new gamelib::InlineBehavioralAction([&](const unsigned long deltaMs)
+			auto* invertNpcDirection = new gamelib::ai::InlineAction([&](const unsigned long deltaMs)
 				{
 					InvertCurrentDirection();
-					return gamelib::BehaviorResult::Success;
+					return gamelib::Status::Success;
 				});
 
-			auto* moveInFacingDirection = new gamelib::InlineBehavioralAction([&](const unsigned long deltaMs)
+			auto* moveInFacingDirection = new gamelib::ai::InlineAction([&](const unsigned long deltaMs)
 				{
 					if (moveTimer.IsReady())
 					{
@@ -126,12 +126,12 @@ namespace mazer
 						moveTimer.Reset();
 					}
 
-					return gamelib::BehaviorResult::Success;
+					return gamelib::Status::Success;
 				});
 
 			// Configure behavior tree
 			behaviorTree = BehaviorTreeBuilder()
-				.ActiveNodeSelector()
+				.ActiveSelector()
 				.Sequence()
 				.Action(moveInFacingDirection)
 				.Condition(isInvalidMove)
