@@ -27,7 +27,7 @@ namespace mazer
 
 	Room::Room(const string& name, const string& type, const int number, const int x, const int y, const int width,
 		const int height, const bool fill)
-		: DrawableGameObject(name, type, Coordinate(x, y), true)
+		: DrawableGameObject(name, type, Coordinate(static_cast<float>(x), static_cast<float>(y)), true)
 	{
 		this->Bounds = { x, y, width, height };
 		this->width = width;
@@ -118,9 +118,9 @@ namespace mazer
 		}
 	}
 
-	void Room::Update(const unsigned long deltaMs) { /* Not need to update */ }
+	void Room::Update(const cppgamelib::DeltaTime* deltaTime) { /* Not need to update */ }
 
-	ListOfEvents Room::HandleEvent(const std::shared_ptr<Event>& event, const unsigned long deltaMs)
+	ListOfEvents Room::HandleEvent(const std::shared_ptr<Event>& event, const cppgamelib::DeltaTime* deltaTime)
 	{
 		ListOfEvents generatedEvents = {};
 
@@ -275,7 +275,7 @@ namespace mazer
 	bool Room::HasRightWall() const { return IsWalled(Side::Right); }
 
 	AbcdRectangle& Room::GetAbcdRectangle() { return abcd; }
-	Coordinate<int> Room::GetPosition() { return GetAbcdRectangle().GetCenter(); }
+	Coordinate<float> Room::GetPosition() { return GetAbcdRectangle().GetCenter(); }
 	int Room::GetRoomNumber() const { return roomNumber; }
 	int Room::GetRowNumber(const int maxCols) const { return GetRoomNumber() / maxCols; }
 
@@ -320,7 +320,7 @@ namespace mazer
 	}
 
 	// ReSharper disable once CppParameterNamesMismatch
-	Coordinate<int> Room::GetCenter(const int w, const int h) const
+	Coordinate<float> Room::GetCenter(const int w, const int h) const
 	{
 		const auto roomXMid = GetX() + (GetWidth() / 2);
 		const auto roomYMid = GetY() + (GetHeight() / 2);
@@ -329,18 +329,18 @@ namespace mazer
 		return { x, y };
 	}
 
-	Coordinate<int> Room::GetCenter() const
+	Coordinate<float> Room::GetCenter() const
 	{
 		return GetCenter(GetWidth(), GetHeight());
 	}
 
-	Coordinate<int> Room::GetCenter(const AbcdRectangle& rectangle) const
+	Coordinate<float> Room::GetCenter(const AbcdRectangle& rectangle) const
 	{
 		const auto roomXMid = GetX() + (GetWidth() / 2);
 		const auto roomYMid = GetY() + (GetHeight() / 2);
 		const auto x = roomXMid - rectangle.GetWidth() / 2;
 		const auto y = roomYMid - rectangle.GetHeight() / 2;
-		return { x, y };
+		return { static_cast<float>(x), static_cast<float>(y) };
 	}
 
 	int Room::GetNeighborIndex(const Side index) const

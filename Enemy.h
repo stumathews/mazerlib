@@ -34,7 +34,7 @@ namespace mazer
 	{
 	public:
 		Enemy(const std::string& name,
-			const std::string& type, gamelib::Coordinate<int> position,
+			const std::string& type, gamelib::Coordinate<float> position,
 			bool visible,
 			const std::shared_ptr<Room>& startRoom, std::shared_ptr<gamelib::AnimatedSprite> sprite,
 			gamelib::Direction startingDirection,
@@ -47,10 +47,10 @@ namespace mazer
 		std::shared_ptr<RoomInfo> CurrentRoom;
 		std::shared_ptr<const Level> CurrentLevel;
 		std::vector<std::shared_ptr<gamelib::Event>> HandleEvent(const std::shared_ptr<gamelib::Event>& event,
-			const unsigned long deltaMs) override;
+			const cppgamelib::DeltaTime* deltaTime) override;
 		void DoEnemyBehaviors(unsigned long deltaMs);
 		bool Move(const unsigned long deltaMs); // true if moved
-		void Update(unsigned long deltaMs) override;
+		void Update(const cppgamelib::DeltaTime* deltaTime) override;
 		void LoadSettings() override;
 		std::string GetSubscriberName() override { return Name; }
 		std::string GetName() override { return Name; }

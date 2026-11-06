@@ -14,7 +14,7 @@ public:
 	{
 		
 		
-		Subject = std::make_shared<mazer::Player>(playerName, playerType, gamelib::Coordinate<int>{1,2}, 3, 4, identifier);
+		Subject = std::make_shared<mazer::Player>(playerName, playerType, gamelib::Coordinate<float>{1,2}, 3, 4, identifier);
 		
 	}
 
@@ -49,7 +49,7 @@ TEST_F(PlayerTests, BasicsSetCorrectly)
 
 TEST_F(PlayerTests, Basic)
 {
-	Player player("player1", "Player", gamelib::Coordinate<int>(0,0), 0, 0, "player1");
+	Player player("player1", "Player", gamelib::Coordinate<float>(0,0), 0, 0, "player1");
 	EXPECT_EQ(player.Position.GetX(), 0);
 	EXPECT_EQ(player.Position.GetY(), 0);
 	EXPECT_EQ(player.Bounds.w, 0);
@@ -61,5 +61,5 @@ TEST_F(PlayerTests, Basic)
 
 TEST_F(PlayerTests, HandleEvents)
 {
-	Player player("player1", "Player", gamelib::Coordinate<int>(0, 0), 0, 0, "player1");
+	Player player("player1", "Player", gamelib::Coordinate<float>(0, 0), 0, 0, "player1");
 }

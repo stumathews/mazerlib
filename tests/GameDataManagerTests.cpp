@@ -23,7 +23,7 @@ using namespace mazer;
 class MockPlayer final : public Player
 {
 public:
-	MockPlayer(const std::string& name, const std::string& type, const gamelib::Coordinate<int>& position, const int width,
+	MockPlayer(const std::string& name, const std::string& type, const gamelib::Coordinate<float>& position, const int width,
 	           const int height, const std::string& identifier)
 		: Player(name, type, position, width, height, identifier)
 	{
@@ -57,7 +57,7 @@ public:
 		gamelib::EventManager::Get()->ClearSubscribers();
 	}
 
-	std::vector<std::shared_ptr<gamelib::Event>> HandleEvent(const std::shared_ptr<gamelib::Event>& evt, const unsigned long deltaMs = 0) override
+	std::vector<std::shared_ptr<gamelib::Event>> HandleEvent(const std::shared_ptr<gamelib::Event>& evt, const cppgamelib::DeltaTime* deltaTime = 0) override
 	{
 		return {};
 	}

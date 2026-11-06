@@ -24,7 +24,7 @@ namespace mazer
 {
 	Player::Player(const std::string& name,
 		const std::string& type,
-		const Coordinate<int> position, // we know the position the player is at
+		const Coordinate<float> position, // we know the position the player is at
 		const int width,
 		const int height,
 		const std::string& identifier)
@@ -114,13 +114,13 @@ namespace mazer
 	{
 	}
 
-	ListOfEvents Player::HandleEvent(const std::shared_ptr<Event>& event, const unsigned long deltaMs)
+	ListOfEvents Player::HandleEvent(const std::shared_ptr<Event>& event, const cppgamelib::DeltaTime* deltaTime)
 	{
 		ListOfEvents createdEvents{};
 
 		if (event->Id.PrimaryId == ControllerMoveEventId.PrimaryId)
 		{
-			return OnControllerMove(event, createdEvents, deltaMs);
+			return OnControllerMove(event, createdEvents, deltaTime);
 		}
 
 		if (event->Id.PrimaryId == FireEventId.PrimaryId)
@@ -146,7 +146,7 @@ namespace mazer
 		return createdEvents;
 	}
 
-	const ListOfEvents& Player::OnControllerMove(const shared_ptr<Event>& event, ListOfEvents& createdEvents, const unsigned long deltaMs)
+	const ListOfEvents& Player::OnControllerMove(const shared_ptr<Event>& event, ListOfEvents& createdEvents, const cppgamelib::DeltaTime* deltaTime)
 	{
 		if (gameWon)
 		{
@@ -164,11 +164,11 @@ namespace mazer
 		return createdEvents;
 	}
 
-	void Player::Update(const unsigned long deltaMs)
+	void Player::Update(const cppgamelib::DeltaTime* deltaTime)
 	{
 		if (GameData::Get()->IsGameWon()) return;
 
-		moveTimer.Update(deltaMs);
+		moveTimer.Update(deltaTime->milliseconds);
 
 		// We don't move every single frame...
 		moveTimer.DoIfReady([&]()
@@ -177,7 +177,7 @@ namespace mazer
 
 				CancelInvalidDirectionKeyPresses(DirectionKeyStates);
 
-				Move(deltaMs);
+				Move(deltaTime);
 
 				// restore original key states (e.g. the temporarily cancelled keypress my now be acceptable)
 				DirectionKeyStates = keyStateBackup;
@@ -196,9 +196,9 @@ namespace mazer
 		}
 	}
 
-	void Player::Move(const unsigned long deltaMs)
+	void Player::Move(const cppgamelib::DeltaTime* deltaTime)
 	{
-		const auto movement = std::make_shared<StatefulMove>(speed, DirectionKeyStates, deltaMs);
+		const auto movement = std::make_shared<StatefulMove>(speed, DirectionKeyStates, deltaTime->milliseconds);
 
 		// Move player
 		const auto isValidMove = moveStrategy->MoveGameObject(movement);
@@ -214,7 +214,7 @@ namespace mazer
 			// Only animate sprite if there is no direction set
 			if (movement->GetDirection() != Direction::None)
 			{
-				Sprite->Update(deltaMs, AnimatedSprite::GetStdDirectionAnimationFrameGroup(movement->GetDirection()));
+				Sprite->Update(deltaTime, AnimatedSprite::GetStdDirectionAnimationFrameGroup(movement->GetDirection()));
 			}
 
 			Sprite->MoveSprite(Position.GetX(), Position.GetY());

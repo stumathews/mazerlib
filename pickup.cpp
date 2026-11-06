@@ -21,7 +21,7 @@ namespace mazer
 {
 	Pickup::Pickup(const std::string& name, const std::string& type, const int x, const int y, const int width,
 		const int height, const bool visible, const int inRoomNumber)
-		: DrawableGameObject(name, type, gamelib::Coordinate(x, y), visible)
+		: DrawableGameObject(name, type, gamelib::Coordinate(static_cast<float>(x), static_cast<float>(y)), visible)
 	{
 		this->IsVisible = visible;
 		this->width = width;
@@ -29,10 +29,10 @@ namespace mazer
 		this->RoomNumber = inRoomNumber;
 	}
 
-	Pickup::Pickup(const std::string& name, const std::string& type, const gamelib::Coordinate<int> startingPoint,
+	Pickup::Pickup(const std::string& name, const std::string& type, const gamelib::Coordinate<float> startingPoint,
 		// ReSharper disable once CppPassValueParameterByConstReference
 		const bool visible, const int inRoomNumber, const std::shared_ptr<gamelib::SpriteAsset> asset)  // NOLINT(performance-unnecessary-value-param)
-		: DrawableGameObject(name, type, gamelib::Coordinate(startingPoint.GetX(), startingPoint.GetY()), visible)
+		: DrawableGameObject(name, type, gamelib::Coordinate(static_cast<float>(startingPoint.GetX()), static_cast<float>(startingPoint.GetY())), visible)
 	{
 		this->IsVisible = visible;
 		this->Asset = asset;
@@ -58,7 +58,7 @@ namespace mazer
 		height = sprite->Dimensions.GetHeight();
 	}
 
-	gamelib::ListOfEvents Pickup::HandleEvent(const std::shared_ptr<gamelib::Event>& event, const unsigned long deltaMs)
+	gamelib::ListOfEvents Pickup::HandleEvent(const std::shared_ptr<gamelib::Event>& event, const cppgamelib::DeltaTime* deltaTime)
 	{
 		gamelib::ListOfEvents generatedEvents;
 
@@ -89,14 +89,14 @@ namespace mazer
 		sprite->Draw(renderer);
 	}
 
-	void Pickup::Update(const unsigned long deltaMs)
+	void Pickup::Update(const cppgamelib::DeltaTime* deltaTime)
 	{
 		// Move sprite
 		sprite->Position.SetX(Position.GetX());
 		sprite->Position.SetY(Position.GetY());
 
 		// Update sprite
-		sprite->Update(deltaMs);
+		sprite->Update(deltaTime);
 	}
 
 	gamelib::GameObjectType Pickup::GetGameObjectType()

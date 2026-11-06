@@ -28,7 +28,7 @@ namespace mazer
 
 	Enemy::Enemy(const std::string& name,
 		const std::string& type,
-		const gamelib::Coordinate<int> position,
+		const gamelib::Coordinate<float> position,
 		const bool visible,
 		const std::shared_ptr<Room>& startRoom,
 		std::shared_ptr<gamelib::AnimatedSprite> sprite,
@@ -179,7 +179,7 @@ namespace mazer
 	}
 
 	std::vector<std::shared_ptr<gamelib::Event>> Enemy::HandleEvent(const std::shared_ptr<gamelib::Event>& event,
-		const unsigned long deltaMs)
+		const cppgamelib::DeltaTime* deltaTime)
 	{
 		// Only if the player moves...
 		if (event->Id == gamelib::PlayerMovedEventTypeEventId)
@@ -196,7 +196,7 @@ namespace mazer
 		return {};
 	}
 
-	void Enemy::Update(const unsigned long deltaMs)
+	void Enemy::Update(const cppgamelib::DeltaTime* deltaTime)
 	{
 		if (GameData::Get()->IsGameWon())
 		{
@@ -204,13 +204,13 @@ namespace mazer
 		}
 
 		// We only want to move and emit move events periodically. Update the periodic timer
-		moveTimer.Update(deltaMs);
+		moveTimer.Update(deltaTime->milliseconds);
 
 		// Do common/normal NPC activities also
-		Npc::Update(deltaMs);
+		Npc::Update(deltaTime);
 
 		// Do enemy behavior
-		DoEnemyBehaviors(deltaMs);
+		DoEnemyBehaviors(deltaTime->milliseconds);
 	}
 
 	void Enemy::DoEnemyBehaviors(const unsigned long deltaMs)

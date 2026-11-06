@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL_render.h>
 #include <geometry/Coordinate.h>
 #include <objects/DrawableGameObject.h>
 
@@ -21,7 +22,7 @@ namespace mazer
 		Pickup(const std::string& name, const std::string& type, const int x, const int y, const int width,
 			const int height, const bool visible, const int inRoomNumber);
 
-		Pickup(const std::string& name, const std::string& type, const gamelib::Coordinate<int> startingPoint, const bool visible,
+		Pickup(const std::string& name, const std::string& type, const gamelib::Coordinate<float> startingPoint, const bool visible,
 			const int inRoomNumber, const std::shared_ptr<gamelib::SpriteAsset> asset);
 
 		explicit Pickup(const bool visible);
@@ -31,11 +32,11 @@ namespace mazer
 		std::string GetSubscriberName() override;
 		std::string GetName() override;
 		bool IsInSameRoomAsPlayer(std::shared_ptr<Player> player) const;
-		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const unsigned long deltaMs) override;
+		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const cppgamelib::DeltaTime* deltaTime) override;
 
 		void Initialize();
 		void Draw(SDL_Renderer* renderer) override;
-		void Update(unsigned long deltaMs) override;
+		void Update(const cppgamelib::DeltaTime* deltaTime) override;
 
 		int RoomNumber;
 		std::shared_ptr<gamelib::Asset> Asset;

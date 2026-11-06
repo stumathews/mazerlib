@@ -41,13 +41,13 @@ namespace mazer
 		void Draw(SDL_Renderer* renderer) override;
 
 		gamelib::GameObjectType GetGameObjectType() override { return gamelib::GameObjectType::game_defined; }
-		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const unsigned long deltaMs) override;
+		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const cppgamelib::DeltaTime* deltaTime) override;
 		gamelib::ListOfEvents& OnPlayerMoved(std::vector<std::shared_ptr<gamelib::Event>>& generatedEvents);
-		gamelib::Coordinate<int> GetCenter(int width, int height) const;
-		gamelib::Coordinate<int> GetCenter() const;
-		gamelib::Coordinate<int> GetCenter(const gamelib::AbcdRectangle& rectangle) const;
+		gamelib::Coordinate<float> GetCenter(int width, int height) const;
+		gamelib::Coordinate<float> GetCenter() const;
+		gamelib::Coordinate<float> GetCenter(const gamelib::AbcdRectangle& rectangle) const;
 
-		gamelib::Coordinate<int> GetPosition();
+		gamelib::Coordinate<float> GetPosition();
 		int GetNeighborIndex(gamelib::Side index) const;
 		int GetX() const;
 		int GetY() const;
@@ -91,7 +91,7 @@ namespace mazer
 		void UpdateEnemyRoom(const std::shared_ptr<Enemy>& enemy);
 
 	public:
-		void Update(unsigned long deltaMs) override;
+		void Update(const cppgamelib::DeltaTime* deltaTime) override;
 
 	private:
 		bool isPlayerWithinRoom = false;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <SDL_render.h>
 #include <vector>
 #include <cppgamelib/events/ControllerMoveEvent.h>
 #include <objects/DrawableGameObject.h>
@@ -30,7 +31,7 @@ namespace mazer
 	class Player : public gamelib::DrawableGameObject
 	{
 	public:
-		Player(const std::string& name, const std::string& type, gamelib::Coordinate<int> position, int width,
+		Player(const std::string& name, const std::string& type, gamelib::Coordinate<float> position, int width,
 			int height, const std::string
 			& identifier);
 
@@ -47,7 +48,7 @@ namespace mazer
 		void LoadSettings() override;
 		void LogMessage(const char* str, bool verbose);
 		std::vector<std::shared_ptr<gamelib::Event>> HandleEvent(const std::shared_ptr<gamelib::Event>& event,
-			const unsigned long deltaMs) override;
+			const cppgamelib::DeltaTime* deltaTime) override;
 		std::string GetName() override;
 		void Fire() const;
 		void OnGameWon();
@@ -57,7 +58,7 @@ namespace mazer
 		void RemoveBottomWall() const;
 		void RemoveTopWall() const;
 		void SetPlayerDirection(gamelib::Direction direction);
-		void Update(unsigned long deltaMs) override;
+		void Update(const cppgamelib::DeltaTime* deltaTime) override;
 		void Draw(SDL_Renderer* renderer) override;
 
 		void SetSprite(const std::shared_ptr<gamelib::AnimatedSprite>& inSprite);
@@ -79,8 +80,8 @@ namespace mazer
 		void CommonInit(int playerWidth, int playerHeight, const std::string& identifier);
 		void CenterPlayerInRoom(const std::shared_ptr<Room>& targetRoom);
 		const gamelib::ListOfEvents& OnControllerMove(const std::shared_ptr<gamelib::Event>& event,
-			gamelib::ListOfEvents& createdEvents, unsigned long deltaMs);
-		void Move(unsigned long deltaMs);
+			gamelib::ListOfEvents& createdEvents, const cppgamelib::DeltaTime* deltaTime);
+		void Move(const cppgamelib::DeltaTime* deltaTime);
 		void CancelInvalidDirectionKeyPresses(std::map<gamelib::Direction, gamelib::ControllerMoveEvent::KeyState>& currentKeyStates);
 		int speed{};
 		int pixelsToMove = 0;

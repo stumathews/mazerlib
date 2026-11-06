@@ -42,11 +42,11 @@ namespace mazer
 		return isMoveValid;
 	}
 
-	gamelib::Coordinate<int> GameObjectMoveStrategy::CalculateGameObjectMove(
+	gamelib::Coordinate<float> GameObjectMoveStrategy::CalculateGameObjectMove(
 		const std::shared_ptr<gamelib::IMovement>& movement, const int pixelsToMove) const
 	{
-		int y = gameObject->Position.GetY();
-		int x = gameObject->Position.GetX();
+		float y = gameObject->Position.GetY();
+		float x = gameObject->Position.GetX();
 
 		switch (movement->GetDirection())
 		{
@@ -60,7 +60,7 @@ namespace mazer
 		return { x, y };
 	}
 
-	void GameObjectMoveStrategy::SetGameObjectPosition(const gamelib::Coordinate<int> resultingMove) const
+	void GameObjectMoveStrategy::SetGameObjectPosition(const gamelib::Coordinate<float> resultingMove) const
 	{
 		// Actually move the underlying game object by modifying it
 		gameObject->Position.SetX(resultingMove.GetX());

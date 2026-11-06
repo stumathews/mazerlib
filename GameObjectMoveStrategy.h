@@ -28,8 +28,8 @@ namespace mazer
 	private:
 
 
-		void SetGameObjectPosition(gamelib::Coordinate<int> resultingMove) const;
-		[[nodiscard]] gamelib::Coordinate<int> CalculateGameObjectMove(const std::shared_ptr<gamelib::IMovement>& movement,
+		void SetGameObjectPosition(gamelib::Coordinate<float> resultingMove) const;
+		[[nodiscard]] gamelib::Coordinate<float> CalculateGameObjectMove(const std::shared_ptr<gamelib::IMovement>& movement,
 			int pixelsToMove) const;
 		[[nodiscard]] bool IsValidMove(const std::shared_ptr<gamelib::IMovement>& movement) override;
 
