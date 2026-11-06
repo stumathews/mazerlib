@@ -47,7 +47,7 @@ namespace mazer
 		instance = nullptr;
 	}
 
-	ListOfEvents GameDataManager::HandleEvent(const std::shared_ptr<Event>& event, const cppgamelib::DeltaTime* deltaTime)
+	ListOfEvents GameDataManager::HandleEvent(const std::shared_ptr<Event>& event, const gamelib::DeltaTime* deltaTime)
 	{
 		if (event->Id == AddGameObjectToCurrentSceneEventId)
 		{

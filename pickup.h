@@ -32,11 +32,11 @@ namespace mazer
 		std::string GetSubscriberName() override;
 		std::string GetName() override;
 		bool IsInSameRoomAsPlayer(std::shared_ptr<Player> player) const;
-		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const cppgamelib::DeltaTime* deltaTime) override;
+		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const gamelib::DeltaTime* deltaTime) override;
 
 		void Initialize();
 		void Draw(SDL_Renderer* renderer) override;
-		void Update(const cppgamelib::DeltaTime* deltaTime) override;
+		void Update(const gamelib::DeltaTime* deltaTime) override;
 
 		int RoomNumber;
 		std::shared_ptr<gamelib::Asset> Asset;

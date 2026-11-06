@@ -57,7 +57,7 @@ public:
 		gamelib::EventManager::Get()->ClearSubscribers();
 	}
 
-	std::vector<std::shared_ptr<gamelib::Event>> HandleEvent(const std::shared_ptr<gamelib::Event>& evt, const cppgamelib::DeltaTime* deltaTime = 0) override
+	std::vector<std::shared_ptr<gamelib::Event>> HandleEvent(const std::shared_ptr<gamelib::Event>& evt, const gamelib::DeltaTime* deltaTime = 0) override
 	{
 		return {};
 	}

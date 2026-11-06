@@ -168,7 +168,7 @@ namespace mazer
 		}
 	}
 
-	ListOfEvents Level::HandleEvent(const std::shared_ptr<Event>& evt, const cppgamelib::DeltaTime* deltaTime)
+	ListOfEvents Level::HandleEvent(const std::shared_ptr<Event>& evt, const gamelib::DeltaTime* deltaTime)
 	{
 		// Level itself does not handle any events
 		return {};

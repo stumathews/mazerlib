@@ -31,7 +31,7 @@ namespace mazer
 
 		~GameDataManager() override;
 
-		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const cppgamelib::DeltaTime* deltaTime) override;
+		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& event, const gamelib::DeltaTime* deltaTime) override;
 		std::string GetSubscriberName() override;
 		void Initialize(bool isNetworkGame);
 

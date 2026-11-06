@@ -48,7 +48,7 @@ namespace mazer
 		void LoadSettings() override;
 		void LogMessage(const char* str, bool verbose);
 		std::vector<std::shared_ptr<gamelib::Event>> HandleEvent(const std::shared_ptr<gamelib::Event>& event,
-			const cppgamelib::DeltaTime* deltaTime) override;
+			const gamelib::DeltaTime* deltaTime) override;
 		std::string GetName() override;
 		void Fire() const;
 		void OnGameWon();
@@ -58,7 +58,7 @@ namespace mazer
 		void RemoveBottomWall() const;
 		void RemoveTopWall() const;
 		void SetPlayerDirection(gamelib::Direction direction);
-		void Update(const cppgamelib::DeltaTime* deltaTime) override;
+		void Update(const gamelib::DeltaTime* deltaTime) override;
 		void Draw(SDL_Renderer* renderer) override;
 
 		void SetSprite(const std::shared_ptr<gamelib::AnimatedSprite>& inSprite);
@@ -80,8 +80,8 @@ namespace mazer
 		void CommonInit(int playerWidth, int playerHeight, const std::string& identifier);
 		void CenterPlayerInRoom(const std::shared_ptr<Room>& targetRoom);
 		const gamelib::ListOfEvents& OnControllerMove(const std::shared_ptr<gamelib::Event>& event,
-			gamelib::ListOfEvents& createdEvents, const cppgamelib::DeltaTime* deltaTime);
-		void Move(const cppgamelib::DeltaTime* deltaTime);
+			gamelib::ListOfEvents& createdEvents, const gamelib::DeltaTime* deltaTime);
+		void Move(const gamelib::DeltaTime* deltaTime);
 		void CancelInvalidDirectionKeyPresses(std::map<gamelib::Direction, gamelib::ControllerMoveEvent::KeyState>& currentKeyStates);
 		int speed{};
 		int pixelsToMove = 0;

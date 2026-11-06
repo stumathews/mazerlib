@@ -114,7 +114,7 @@ namespace mazer
 	{
 	}
 
-	ListOfEvents Player::HandleEvent(const std::shared_ptr<Event>& event, const cppgamelib::DeltaTime* deltaTime)
+	ListOfEvents Player::HandleEvent(const std::shared_ptr<Event>& event, const gamelib::DeltaTime* deltaTime)
 	{
 		ListOfEvents createdEvents{};
 
@@ -146,7 +146,7 @@ namespace mazer
 		return createdEvents;
 	}
 
-	const ListOfEvents& Player::OnControllerMove(const shared_ptr<Event>& event, ListOfEvents& createdEvents, const cppgamelib::DeltaTime* deltaTime)
+	const ListOfEvents& Player::OnControllerMove(const shared_ptr<Event>& event, ListOfEvents& createdEvents, const gamelib::DeltaTime* deltaTime)
 	{
 		if (gameWon)
 		{
@@ -164,7 +164,7 @@ namespace mazer
 		return createdEvents;
 	}
 
-	void Player::Update(const cppgamelib::DeltaTime* deltaTime)
+	void Player::Update(const gamelib::DeltaTime* deltaTime)
 	{
 		if (GameData::Get()->IsGameWon()) return;
 
@@ -196,7 +196,7 @@ namespace mazer
 		}
 	}
 
-	void Player::Move(const cppgamelib::DeltaTime* deltaTime)
+	void Player::Move(const gamelib::DeltaTime* deltaTime)
 	{
 		const auto movement = std::make_shared<StatefulMove>(speed, DirectionKeyStates, deltaTime->milliseconds);
 

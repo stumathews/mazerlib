@@ -179,7 +179,7 @@ namespace mazer
 	}
 
 	std::vector<std::shared_ptr<gamelib::Event>> Enemy::HandleEvent(const std::shared_ptr<gamelib::Event>& event,
-		const cppgamelib::DeltaTime* deltaTime)
+		const gamelib::DeltaTime* deltaTime)
 	{
 		// Only if the player moves...
 		if (event->Id == gamelib::PlayerMovedEventTypeEventId)
@@ -196,7 +196,7 @@ namespace mazer
 		return {};
 	}
 
-	void Enemy::Update(const cppgamelib::DeltaTime* deltaTime)
+	void Enemy::Update(const gamelib::DeltaTime* deltaTime)
 	{
 		if (GameData::Get()->IsGameWon())
 		{

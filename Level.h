@@ -35,7 +35,7 @@ namespace mazer
 		Level();
 		void InitializeEnemies();
 		void Load();
-		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& evt, const cppgamelib::DeltaTime* deltaTime) override;
+		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& evt, const gamelib::DeltaTime* deltaTime) override;
 		std::string GetSubscriberName() override { return "Level"; }
 		void InitializePickups(const std::vector<std::shared_ptr<Pickup>>& inPickups);
 		void AddGameObjectToScene(const std::shared_ptr<gamelib::GameObject>& object);

@@ -118,9 +118,9 @@ namespace mazer
 		}
 	}
 
-	void Room::Update(const cppgamelib::DeltaTime* deltaTime) { /* Not need to update */ }
+	void Room::Update(const gamelib::DeltaTime* deltaTime) { /* Not need to update */ }
 
-	ListOfEvents Room::HandleEvent(const std::shared_ptr<Event>& event, const cppgamelib::DeltaTime* deltaTime)
+	ListOfEvents Room::HandleEvent(const std::shared_ptr<Event>& event, const gamelib::DeltaTime* deltaTime)
 	{
 		ListOfEvents generatedEvents = {};
 
@@ -275,7 +275,7 @@ namespace mazer
 	bool Room::HasRightWall() const { return IsWalled(Side::Right); }
 
 	AbcdRectangle& Room::GetAbcdRectangle() { return abcd; }
-	Coordinate<float> Room::GetPosition() { return GetAbcdRectangle().GetCenter(); }
+	Coordinate<int> Room::GetPosition() { return GetAbcdRectangle().GetCenter(); }
 	int Room::GetRoomNumber() const { return roomNumber; }
 	int Room::GetRowNumber(const int maxCols) const { return GetRoomNumber() / maxCols; }
 

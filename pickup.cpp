@@ -58,7 +58,7 @@ namespace mazer
 		height = sprite->Dimensions.GetHeight();
 	}
 
-	gamelib::ListOfEvents Pickup::HandleEvent(const std::shared_ptr<gamelib::Event>& event, const cppgamelib::DeltaTime* deltaTime)
+	gamelib::ListOfEvents Pickup::HandleEvent(const std::shared_ptr<gamelib::Event>& event, const gamelib::DeltaTime* deltaTime)
 	{
 		gamelib::ListOfEvents generatedEvents;
 
@@ -89,7 +89,7 @@ namespace mazer
 		sprite->Draw(renderer);
 	}
 
-	void Pickup::Update(const cppgamelib::DeltaTime* deltaTime)
+	void Pickup::Update(const gamelib::DeltaTime* deltaTime)
 	{
 		// Move sprite
 		sprite->Position.SetX(Position.GetX());
