@@ -21,10 +21,12 @@ namespace mazer
 	{
 		SubscribeToEvent(AddGameObjectToCurrentSceneEventId);
 		SubscribeToEvent(GameObjectTypeEventId);
+
 		GameData::Get()->IsNetworkGame = isNetworkGame;
 		GameData::Get()->IsGameDone = false;
 		GameData::Get()->IsNetworkGame = false;
 		GameData::Get()->CanDraw = true;
+
 		GameWorldData.CanDraw = GameData::Get()->CanDraw;
 		GameWorldData.IsNetworkGame = GameData::Get()->IsNetworkGame;
 		GameWorldData.IsGameDone = GameData::Get()->IsGameDone;
@@ -38,7 +40,10 @@ namespace mazer
 
 	GameDataManager* GameDataManager::Get()
 	{
-		if (instance == nullptr) { instance = new GameDataManager(); }
+		if (instance == nullptr)
+		{
+			instance = new GameDataManager();
+		}
 		return instance;
 	}
 

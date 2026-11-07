@@ -31,13 +31,19 @@ namespace mazer
 	class Level final : public gamelib::EventSubscriber, public std::enable_shared_from_this<Level>
 	{
 	public:
+		// Initialize level for creating level from a level file
 		explicit Level(const std::string& filename);
+		// Initialize for manual level creating
 		Level();
-		void InitializeEnemies();
+		void ConfigureEnemies();
+
+		// Load the level into the game
 		void Load();
+
+		// Doesn't do anything yet
 		gamelib::ListOfEvents HandleEvent(const std::shared_ptr<gamelib::Event>& evt, const gamelib::DeltaTime* deltaTime) override;
 		std::string GetSubscriberName() override { return "Level"; }
-		void InitializePickups(const std::vector<std::shared_ptr<Pickup>>& inPickups);
+		void ConfigurePickups(const std::vector<std::shared_ptr<Pickup>>& inPickups);
 		void AddGameObjectToScene(const std::shared_ptr<gamelib::GameObject>& object);
 		std::shared_ptr<gamelib::GameObject> ParseObject(tinyxml2::XMLNode* pObject, const std::shared_ptr<Room>& room) const;
 		static void InitializePlayer(const std::shared_ptr<Player>& inPlayer, const std::shared_ptr<gamelib::SpriteAsset>& spriteAsset);

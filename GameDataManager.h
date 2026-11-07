@@ -18,7 +18,7 @@ namespace gamelib
 namespace mazer
 {
 
-	// Wrapper and access to GameData
+	// Automatically handles game events that concern the GameWorld Data such as adding game nd removing objects from gameworld
 	class GameDataManager final : public gamelib::EventSubscriber
 	{
 	public:

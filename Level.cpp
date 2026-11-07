@@ -30,7 +30,6 @@ using namespace gamelib;
 
 namespace mazer
 {
-
 	Level::Level(const std::string& filename) : NumCols(0), NumRows(0), ScreenWidth(0), ScreenHeight(0), isAutoLevel(false)
 	{
 		FileName = filename;
@@ -57,13 +56,17 @@ namespace mazer
 			// Get Auto Level creation options:
 			const auto removeRandomSidesOption = SettingsManager::Bool("grid", "removeSidesRandomly");
 
-			Rooms = RoomGenerator(static_cast<int>(ScreenWidth),
-				static_cast<int>(ScreenHeight),
-				NumRows, NumCols,
-				removeRandomSidesOption).Generate();
+			// Prepare room generator
+			const auto roomGenerator = RoomGenerator(ScreenWidth, ScreenHeight, NumRows, NumCols, removeRandomSidesOption);
+
+			// Automagically self-generate the room objects for this level
+			Rooms = roomGenerator.Generate();
+
+			// We don't load the NPCs (just the rooms)
 			return;
 		}
 
+		// Load the level from level file
 		XMLDocument doc;
 
 		doc.LoadFile(FileName.c_str());
@@ -71,25 +74,25 @@ namespace mazer
 		if (doc.ErrorID() == 0)
 		{
 			auto* scene = doc.FirstChildElement("level");
+
+			// Read top-level level config
 			NumCols = std::strtol(scene->ToElement()->Attribute("cols"), nullptr, 0);
 			NumRows = std::strtol(scene->ToElement()->Attribute("rows"), nullptr, 0);
+			ScreenWidth = SettingsManager::Int("global", "screen_width");
+			ScreenHeight = SettingsManager::Int("global", "screen_height");
 
 			// Check if the level file specifies that we should automatically create pickups for the level
 			if (auto autoPopulatePickups = scene->ToElement()->Attribute("autoPopulatePickups"))
 			{
+				// Transform setting value as uppercase
 				auto strToTransform = string(autoPopulatePickups);
-				std::transform(strToTransform.begin(), strToTransform.end(), strToTransform.begin(),
-				       [](unsigned char c){ return std::toupper(c); });
+				ranges::transform(strToTransform, strToTransform.begin(),
+				                  [](unsigned char c){ return std::toupper(c); });
 
 				isAutoPopulatePickups = strToTransform == "TRUE";
 			}
 
-			// Read some config that specifies how big the screen is
-			ScreenWidth = SettingsManager::Int("global", "screen_width");
-			ScreenHeight = SettingsManager::Int("global", "screen_height");
-
-			// List of Rooms generated
-
+			// Prase the level file's list of specified rooms
 			for (auto roomNode = scene->FirstChild(); roomNode; roomNode = roomNode->NextSibling()) //  <room ...>
 			{
 				auto roomElement = roomNode->ToElement();
@@ -113,12 +116,14 @@ namespace mazer
 				auto room = std::make_shared<Room>(roomName, "Room", number, col * squareWidth, row * squareHeight,
 					squareWidth, squareHeight, false);
 
+				// Local func
 				auto setWall = [&](const std::string& sideVisibilityString, const Side side,
 					const std::shared_ptr<Room>& inRoom) -> void
 					{
 						sideVisibilityString == "True" ? inRoom->AddWall(side) : inRoom->RemoveWall(side);
 					};
 
+				// Configure the room object according to its specification in the level file
 				setWall(rightSideVisible, Side::Right, room);
 				setWall(leftSideVisible, Side::Left, room);
 				setWall(topSideVisible, Side::Top, room);
@@ -133,6 +138,8 @@ namespace mazer
 				for (auto pRoomChild = roomNode->FirstChild(); pRoomChild; pRoomChild = pRoomChild->NextSibling())
 				{
 					string roomChildName = pRoomChild->Value();
+
+					// Create a game object within the room
 					if (roomChildName == "object") // <object ...
 					{
 						// Create whatever Game Object the object represents and return it as a GameObject
@@ -160,11 +167,12 @@ namespace mazer
 				Rooms.push_back(room);
 			}
 
+			// Further configure the rooms
 			Rooms::ConfigureRooms(NumRows, NumCols, Rooms);
 
-			// Initialize all the objects we deserialized
-			InitializePickups(Pickups);
-			InitializeEnemies();
+			// Configure all the objects we deserialized
+			ConfigurePickups(Pickups);
+			ConfigureEnemies();
 		}
 	}
 
@@ -190,23 +198,26 @@ namespace mazer
 		return attributes;
 	}
 
-	void Level::InitializePickups(const std::vector<std::shared_ptr<Pickup>>& inPickups)
+	void Level::ConfigurePickups(const std::vector<std::shared_ptr<Pickup>>& inPickups)
 	{
 		for (const auto& pickup : inPickups)
 		{
 			pickup->LoadSettings();
 			pickup->SubscribeToEvent(PlayerMovedEventTypeEventId); // pickup want to know if player moved
+			GameDataManager::Get()->TheGameData()->AddPickup(pickup);
 
 			AddGameObjectToScene(pickup);
 		}
 	}
 
-	void Level::InitializeEnemies()
+	void Level::ConfigureEnemies()
 	{
 		for (auto& enemy : Enemies)
 		{
 			enemy->Initialize();
+			enemy->LoadSettings();
 			GameDataManager::Get()->TheGameData()->AddEnemy(enemy);
+
 			AddGameObjectToScene(enemy);
 		}
 	}
@@ -238,30 +249,28 @@ namespace mazer
 		}
 		else if (objectType == "Enemy")
 		{
-			gameObject = CharacterBuilder::BuildEnemy(objectName, room, objectResourceId,
-				DirectionUtils::GetRandomDirection(), shared_from_this());
+			gameObject = CharacterBuilder::BuildEnemy(objectName, room, objectResourceId, DirectionUtils::GetRandomDirection(), shared_from_this());
 		}
 
-		// Look for and add properties to the game object
+		// Look if the game object is configured with a properties object
 		for (auto pObjectChild = pObject->FirstChild(); pObjectChild; pObjectChild = pObjectChild->NextSibling())
 		{
-			string objectChildName = pObjectChild->Value();
-
-			if (objectChildName == "property")
+			if (pObjectChild->Value() == "property")
 			{
-				auto keyValuePair = ParseProperty(pObjectChild, gameObject); // hmm, this object has a property attached
+				// Extract the property
+				auto property = ParseProperty(pObjectChild, gameObject); // hmm, this object has a property attached
 
-				auto key = std::get<0>(keyValuePair);
-				const auto value = std::get<1>(keyValuePair);
+				auto key = std::get<0>(property);
+				const auto value = std::get<1>(property);
 
+				// Set the property as a string property
 				gameObject->StringProperties[key] = value;
 			}
 		}
 		return gameObject;
 	}
 
-	void Level::InitializePlayer(const std::shared_ptr<Player>& inPlayer,
-		const std::shared_ptr<SpriteAsset>& spriteAsset)
+	void Level::InitializePlayer(const std::shared_ptr<Player>& inPlayer, const std::shared_ptr<SpriteAsset>& spriteAsset)
 	{
 		inPlayer->SetMoveStrategy(std::make_shared<GameObjectMoveStrategy>(inPlayer, inPlayer->CurrentRoom));
 		inPlayer->SetTag(gamelib::PlayerTag);
