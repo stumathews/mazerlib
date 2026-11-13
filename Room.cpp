@@ -326,7 +326,7 @@ namespace mazer
 		const auto roomYMid = GetY() + (GetHeight() / 2);
 		const auto x = roomXMid - w / 2;
 		const auto y = roomYMid - h / 2;
-		return { x, y };
+		return { static_cast<float>(x), static_cast<float>(y) };
 	}
 
 	Coordinate<float> Room::GetCenter() const
