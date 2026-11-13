@@ -15,10 +15,10 @@ namespace mazer
 {
 
 	GameObjectMoveStrategy::GameObjectMoveStrategy(const std::shared_ptr<gamelib::GameObject>& gameObject,
-		const std::shared_ptr<RoomInfo>& currentRoom)
+		const std::shared_ptr<RoomInfo>& roomInfo)
 	{
 		this->gameObject = gameObject;
-		this->roomInfo = currentRoom;
+		this->roomInfo = roomInfo;
 
 		// Read some config for moving
 		debug = gamelib::SettingsManager::Bool("player", "debugMovement");
@@ -86,7 +86,7 @@ namespace mazer
 	{
 		std::shared_ptr<Room> targetRoom;
 		bool touchingBlockingWalls = false;
-		bool hasValidTargetRoom = false; // is the determined target room valid?
+		bool hasValidTargetRoom; // is the determined target room valid?
 		const auto currentRoom = roomInfo->GetCurrentRoom();
 
 		if (!currentRoom) { return false; }
@@ -134,7 +134,6 @@ namespace mazer
 				currentRoom->HasBottomWall() && intersectsRectAndLine(gameObject->Bounds, currentRoom->BottomLine);
 		}
 
-		// is move valid?
-		return !touchingBlockingWalls && !hasValidTargetRoom;
+		return !touchingBlockingWalls;
 	}
 }
